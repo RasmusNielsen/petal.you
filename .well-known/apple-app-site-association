@@ -2,7 +2,7 @@
   "applinks": {
     "details": [
       {
-        "appIDs": ["YOUR_TEAM_ID.com.your.bundleid"],
+        "appIDs": ["maus.Petal"],
         "components": [
           { "/": "/*" }
         ]
