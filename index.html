@@ -1,19 +1,144 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>petal — Tap into silence</title>
+  <meta name="description" content="petal is an iOS companion and NFC device that helps you block the noise and take back your focus. One tap, and it’s gone." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="nav-dock">
+    <nav class="topnav" aria-label="Primary">
+      <a class="topnav-brand" href="#top">
+        <img class="topnav-mark" src="images/flower.png" alt="" width="764" height="764" decoding="async" />
+        <span class="topnav-word">petal</span>
+      </a>
+      <span class="topnav-divider" aria-hidden="true"></span>
+      <ul class="topnav-links">
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#get-a-petal">Get a petal</a></li>
+        <li><a href="#download">Download</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="page" id="top">
+    <main>
+      <header class="hero">
+        <div class="hero-inner wrap">
+          <img class="mark" src="images/flower.png" alt="" width="764" height="764" decoding="async" />
+          <h1 class="hero-logo">petal</h1>
+          <div class="message hero-message">
+            <p class="slow-line slow-line--1">The world is noisy</p>
+            <p class="slow-line slow-line--2">Reclaim your focus</p>
+          </div>
+          <div class="hero-cta">
+            <a class="btn" href="mailto:hello@petal.you?subject=Buying%20a%20petal">I want one.</a>
+            <a id="download" class="btn btn--dark anchor-target" href="https://apps.apple.com/app/idYOUR_APP_ID">Get iOS app</a>
+          </div>
+        </div>
+      </header>
+
+      <section id="how" class="how wrap reveal anchor-target" data-reveal aria-labelledby="how-heading">
+        <h2 id="how-heading" class="how-heading">How it works</h2>
+        <ol class="how-steps">
+          <li class="how-step">
+            <div class="how-step-icon" aria-hidden="true">
+              <img src="images/icon.onboarding.block.apps.svg" alt="" width="142" height="142" decoding="async" />
+            </div>
+            <div class="how-step-body">
+              <h3 class="how-step-title">Choose what to block</h3>
+              <p class="how-step-desc">Pick the apps that distract you — change the list anytime.</p>
+            </div>
+          </li>
+          <li class="how-step">
+            <div class="how-step-icon" aria-hidden="true">
+              <img src="images/icon.onboarding.flowr.svg" alt="" width="142" height="142" decoding="async" />
+            </div>
+            <div class="how-step-body">
+              <h3 class="how-step-title">Tap the flower</h3>
+              <p class="how-step-desc">
+                NFC-tap your iPhone to the flower to start. Put the flower somewhere away from your phone — the space between
+                them is what holds the session.
+              </p>
+            </div>
+          </li>
+          <li class="how-step">
+            <div class="how-step-icon" aria-hidden="true">
+              <img src="images/icon.onboarding.focus.svg" alt="" width="142" height="142" decoding="async" />
+            </div>
+            <div class="how-step-body">
+              <h3 class="how-step-title">Focus</h3>
+              <p class="how-step-desc">
+                Your chosen apps stay blocked until you bring the flower and phone back together.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="mock mock--fullscreen reveal" data-reveal aria-label="App preview">
+        <img
+          class="mock-img"
+          src="images/mock.webp"
+          alt="petal on iPhone"
+          width="2000"
+          height="1333"
+          loading="lazy"
+          decoding="async"
+        />
+      </section>
+
+      <section id="get-a-petal" class="interest wrap reveal anchor-target" data-reveal aria-labelledby="interest-heading">
+        <h2 id="interest-heading" class="interest-heading">Get a petal</h2>
+        <div class="interest-sides" aria-hidden="true">
+          <span class="interest-face interest-face--a"></span>
+          <span class="interest-face interest-face--b"></span>
+        </div>
+        <p class="interest-lede">
+          We’re opening a list for the NFC flower. If you’d like to buy one, say hello — we’ll keep you posted.
+        </p>
+        <p class="interest-detail">
+          Each petal has <strong>two sides</strong>, and you’ll be able to <strong>pick colors for both</strong> — one face for the
+          table, one for your pocket, same flower.
+        </p>
+      </section>
+    </main>
+
+    <footer class="wrap">
+      © <span id="y"></span> petal
+    </footer>
+  </div>
 
   <script>
-    setTimeout(function () {
-      window.location.href = "https://apps.apple.com/app/idYOUR_APP_ID";
-    }, 1500);
+    document.getElementById("y").textContent = new Date().getFullYear();
+
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce && "IntersectionObserver" in window) {
+      var nodes = document.querySelectorAll("[data-reveal]");
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-visible");
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { rootMargin: "0px 0px -8% 0px", threshold: 0.08 }
+      );
+      nodes.forEach(function (n) {
+        io.observe(n);
+      });
+    } else {
+      document.querySelectorAll("[data-reveal]").forEach(function (n) {
+        n.classList.add("is-visible");
+      });
+    }
   </script>
-</head>
-<body style="font-family: -apple-system; text-align:center; padding:40px;">
-  <h1>Opening app…</h1>
-  <p>If nothing happens:</p>
-  <a href="https://apps.apple.com/app/idYOUR_APP_ID">
-    Download on the App Store
-  </a>
 </body>
 </html>
