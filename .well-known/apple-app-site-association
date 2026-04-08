@@ -2,7 +2,7 @@
   "applinks": {
     "details": [
       {
-        "appIDs": ["maus.Petal"],
+        "appIDs": ["2G728494M3.maus.Petal"],
         "components": [
           { "/": "/*" }
         ]
