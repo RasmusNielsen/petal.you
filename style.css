@@ -200,6 +200,16 @@ main {
   margin: 0 auto 1.15rem;
 }
 
+@media (max-width: 36rem) {
+  .hero-mark-wrap {
+    width: min(22rem, 68vw);
+  }
+
+  .hero-shine {
+    width: 118%;
+  }
+}
+
 .hero-shine-wrap {
   position: absolute;
   inset: 0;
