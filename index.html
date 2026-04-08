@@ -89,16 +89,18 @@
         </ol>
       </section>
 
-      <section class="mock mock--fullscreen reveal" data-reveal aria-label="App preview">
-        <img
+      <section class="mock reveal" data-reveal aria-label="App preview">
+        <video
           class="mock-img"
-          src="images/mock.webp"
-          alt="petal on iPhone"
+          src="images/video.mp4"
           width="2000"
           height="1333"
-          loading="lazy"
-          decoding="async"
-        />
+          autoplay
+          muted
+          loop
+          playsinline
+          aria-label="petal on iPhone"
+        ></video>
       </section>
 
       <section id="get-a-petal" class="interest wrap reveal anchor-target" data-reveal aria-labelledby="interest-heading">
@@ -119,7 +121,10 @@
         </p>
         <div class="interest-actions">
           <a class="btn btn--dark" href="mailto:hello@petal.you?subject=Buying%20a%20petal">Reserve yours <strong>$30</strong></a>
-          <p class="interest-actions-note">Email us to join the list. No payment until we’re ready to ship.</p>
+          <p class="interest-actions-note">
+            Email us to join the list.<br />
+            No payment until we’re ready to ship.
+          </p>
         </div>
       </section>
     </main>
