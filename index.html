@@ -46,7 +46,7 @@
             </p>
           </div>
           <div class="hero-cta">
-            <a class="btn" href="mailto:hello@petal.you?subject=Buying%20a%20petal">I want one <strong>$30</strong></a>
+            <a class="btn anchor-target" href="#get-a-petal">I want one <strong>$30</strong></a>
             <a id="download" class="btn btn--dark anchor-target" href="https://apps.apple.com/app/idYOUR_APP_ID">Get iOS app</a>
           </div>
         </div>
@@ -143,7 +143,7 @@
           A flower, in your color—designed to give you back your time. We’re inviting a small group to be first. If it feels like something you’ve been missing, say hello and we’ll keep you close.
         </p>
         <div class="interest-actions">
-          <a class="btn btn--dark" href="mailto:hello@petal.you?subject=Buying%20a%20petal">Reserve yours <strong>$30</strong></a>
+          <button id="reserve-yours-trigger" class="btn btn--dark" type="button">Reserve yours <strong>$30</strong></button>
           <p class="interest-actions-note">
             Email us to join the list.<br />
             No payment until we’re ready to ship.
@@ -155,6 +155,64 @@
     <footer class="wrap">
       © <span id="y"></span> petal
     </footer>
+  </div>
+
+  <div id="reserve-modal" class="modal" hidden>
+    <div id="reserve-modal-backdrop" class="modal-backdrop" aria-hidden="true"></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="reserve-modal-title">
+      <h3 id="reserve-modal-title" class="modal-title">Reserve petal</h3>
+      <p class="modal-copy">Pick one color for the front and one for the back.</p>
+      <form
+        id="reserve-form"
+        class="reserve-form"
+        action="https://formspree.io/f/xjgpdeaj"
+        method="POST"
+      >
+        <label class="reserve-field" for="reserve-name">
+          <span class="reserve-label">Name</span>
+          <input id="reserve-name" name="name" type="text" autocomplete="name" required />
+        </label>
+        <label class="reserve-field" for="reserve-email">
+          <span class="reserve-label">Email</span>
+          <input id="reserve-email" name="email" type="email" autocomplete="email" required />
+        </label>
+        <label class="reserve-field" for="front-color">
+          <span class="reserve-label">Front color</span>
+          <select id="front-color" name="Front color" required>
+            <option value="Green">Green</option>
+            <option value="Yellow">Yellow</option>
+            <option value="Red">Red</option>
+            <option value="Transparent">Transparent</option>
+            <option value="Black">Black</option>
+            <option value="White">White</option>
+            <option value="Beige">Beige</option>
+          </select>
+        </label>
+        <label class="reserve-field" for="back-color">
+          <span class="reserve-label">Back color</span>
+          <select id="back-color" name="Back color" required>
+            <option value="Green">Green</option>
+            <option value="Yellow">Yellow</option>
+            <option value="Red">Red</option>
+            <option value="Transparent">Transparent</option>
+            <option value="Black">Black</option>
+            <option value="White">White</option>
+            <option value="Beige">Beige</option>
+          </select>
+        </label>
+        <input type="hidden" name="_subject" value="New petal reservation" />
+        <input type="hidden" name="Message" value="I would like to reserve one for $30." />
+        <div class="modal-actions">
+          <button id="reserve-cancel" class="btn" type="button">Cancel</button>
+          <button id="reserve-submit" class="btn btn--dark" type="submit">Send request</button>
+        </div>
+        <p id="reserve-status" class="reserve-status" role="status" aria-live="polite"></p>
+      </form>
+      <div id="reserve-thank-you" class="reserve-thank-you" hidden>
+        <p class="reserve-thank-you-text">Thank you. Your request was sent.</p>
+        <button id="reserve-thank-you-close" class="btn btn--dark" type="button">Close</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -182,6 +240,83 @@
         n.classList.add("is-visible");
       });
     }
+
+    var reserveTrigger = document.getElementById("reserve-yours-trigger");
+    var reserveModal = document.getElementById("reserve-modal");
+    var reserveBackdrop = document.getElementById("reserve-modal-backdrop");
+    var reserveCancel = document.getElementById("reserve-cancel");
+    var reserveForm = document.getElementById("reserve-form");
+    var reserveSubmit = document.getElementById("reserve-submit");
+    var frontColor = document.getElementById("front-color");
+    var backColor = document.getElementById("back-color");
+    var reserveStatus = document.getElementById("reserve-status");
+    var reserveThankYou = document.getElementById("reserve-thank-you");
+    var reserveThankYouClose = document.getElementById("reserve-thank-you-close");
+    var lastFocusedElement = null;
+
+    function openReserveModal() {
+      lastFocusedElement = document.activeElement;
+      reserveModal.hidden = false;
+      document.body.classList.add("modal-open");
+      reserveStatus.textContent = "";
+      reserveForm.hidden = false;
+      reserveThankYou.hidden = true;
+      document.getElementById("reserve-name").focus();
+    }
+
+    function closeReserveModal() {
+      reserveModal.hidden = true;
+      document.body.classList.remove("modal-open");
+      if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
+        lastFocusedElement.focus();
+      }
+    }
+
+    reserveTrigger.addEventListener("click", openReserveModal);
+    reserveCancel.addEventListener("click", closeReserveModal);
+    reserveBackdrop.addEventListener("click", closeReserveModal);
+
+    reserveForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      reserveSubmit.disabled = true;
+      reserveSubmit.textContent = "Sending...";
+      reserveStatus.textContent = "";
+
+      fetch(reserveForm.action, {
+        method: "POST",
+        body: new FormData(reserveForm),
+        headers: { Accept: "application/json" }
+      })
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("Could not send right now.");
+          }
+          reserveStatus.textContent = "";
+          reserveStatus.classList.remove("reserve-status--error");
+          reserveStatus.classList.add("reserve-status--ok");
+          reserveForm.hidden = true;
+          reserveThankYou.hidden = false;
+          reserveForm.reset();
+        })
+        .catch(function () {
+          reserveStatus.textContent = "Could not send right now. Please copy the text and email hello@petal.you.";
+          reserveStatus.classList.remove("reserve-status--ok");
+          reserveStatus.classList.add("reserve-status--error");
+        })
+        .finally(function () {
+          reserveSubmit.disabled = false;
+          reserveSubmit.textContent = "Send request";
+        });
+    });
+
+    reserveThankYouClose.addEventListener("click", closeReserveModal);
+
+    document.addEventListener("keydown", function (event) {
+      if (!reserveModal.hidden && event.key === "Escape") {
+        closeReserveModal();
+      }
+    });
+
   </script>
 </body>
 </html>
